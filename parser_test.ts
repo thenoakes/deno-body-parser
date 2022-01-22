@@ -2,7 +2,7 @@ import { parse } from "./mod.ts";
 import * as ParserMeta from "./metadata.ts";
 import { BufReader, Buffer } from "https://deno.land/std@0.122.0/io/buffer.ts";
 import { assert } from "https://deno.land/std@0.122.0/testing/asserts.ts";
-import { OpineRequest as Request, request } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Request, request } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import { MultipartWriter } from "https://deno.land/std@0.122.0/mime/mod.ts";
 
 const   HDR_VAL_UNKNOWN_TYPE='x-unknown-type',

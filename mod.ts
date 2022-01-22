@@ -12,7 +12,7 @@ import {
   SupportedContentTypeMetadata,
 } from "./metadata.ts";
 import { Parsers } from "./parsers.ts";
-import { OpineRequest as Request } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Request } from "https://deno.land/x/opine@2.1.1/mod.ts";
 
 const KEY_UPLOADED_FILE = "uploadedFile",
   KEY_FILE_NAME_LC = "filename",
