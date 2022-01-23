@@ -1,6 +1,6 @@
 import { readAll, readerFromStreamReader } from "https://deno.land/std@0.122.0/streams/conversion.ts";
-// import { OpineRequest as Request } from "https://deno.land/x/opine@2.1.1/mod.ts";
-import { ParserOptions } from "./metadata.ts";
+import { FormFile, isFormFile, MultipartReader } from "https://deno.land/std@0.95.0/mime/multipart.ts";
+import { FileData, INTERNAL_MFD_FILE_KEY, ParserOptions } from "./metadata.ts";
 
 async function getRaw(req: Request) {
   try {
@@ -47,15 +47,15 @@ function parseValue(v: string) {
   return v;
 }
 
-// function parseFormFile(v: FormFile): FileData {
-//   const ret: FileData = { name: v.filename, type: v.type, size: v.size };
-//   if (v.content) {
-//     ret.content = v.content;
-//   } else {
-//     ret.path = v.tempfile;
-//   }
-//   return ret;
-// }
+function parseFormFile(v: FormFile): FileData {
+  const ret: FileData = { name: v.filename, type: v.type, size: v.size };
+  if (v.content) {
+    ret.content = v.content;
+  } else {
+    ret.path = v.tempfile;
+  }
+  return ret;
+}
 
 type ParserFn = (req: Request, options: ParserOptions) => Promise<{ decoded: unknown; raw: unknown; } | undefined>;
 
@@ -108,27 +108,29 @@ export const Parsers: Record<string, ParserFn> = {
     return { decoded, raw };
   },
 
-  // MFD: async function(req: Request, options: ParserOptions) {
-  //     const ct = req.headers.get("content-type");
-  //     const boundary=ct?.split(";")[1]?.split("=")[1];
-  //     if(!boundary)
-  //         return;
-  //     const rdr = req.body!.getReader();
-  //     const mr = new MultipartReader(rdr, boundary);
-  //     const form = await mr.readForm();
-  //     const decoded:any={};
-  //     for(const entry of form.entries()) {
-  //         const k=entry[0], v=entry[1];
-  //         if(isFormFile(v)) {
-  //             if(!decoded[INTERNAL_MFD_FILE_KEY])
-  //                 decoded[INTERNAL_MFD_FILE_KEY]={};
-  //             decoded[INTERNAL_MFD_FILE_KEY][k]=parseFormFile(v);
-  //         }
-  //         else
-  //             decoded[k]=parseValue(v as unknown as string);
-  //     }
-  //     return {decoded, raw: await getRaw(req)};
-  // },
+  MFD: async function (req: Request, options: ParserOptions) {
+    console.log('MFD');
+      const ct = req.headers.get("content-type");
+      const boundary=ct?.split(";")[1]?.split("=")[1];
+      if(!boundary)
+        return;
+      const rdr = readerFromStreamReader(req.body!.getReader());
+      // const rdr = req.body!.getReader();
+      const mr = new MultipartReader(rdr, boundary);
+      const form = await mr.readForm();
+      const decoded:any={};
+      for(const entry of form.entries()) {
+          const k=entry[0], v=entry[1];
+          if(isFormFile(v)) {
+              if(!decoded[INTERNAL_MFD_FILE_KEY])
+                  decoded[INTERNAL_MFD_FILE_KEY]={};
+              decoded[INTERNAL_MFD_FILE_KEY][k]=parseFormFile(v);
+          }
+          else
+              decoded[k]=parseValue(v as unknown as string);
+      }
+      return {decoded, raw: await getRaw(req)};
+  },
 
   UNKNOWN: async function (req, options) {
     if (options.unknownAsText === true) {
