@@ -1,10 +1,14 @@
-import { readAll } from "https://deno.land/std@0.122.0/streams/conversion.ts";
-import { OpineRequest as Request } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { readAll, readerFromStreamReader } from "https://deno.land/std@0.122.0/streams/conversion.ts";
+// import { OpineRequest as Request } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import { ParserOptions } from "./metadata.ts";
 
 async function getRaw(req: Request) {
   try {
-    return await readAll(req.body);
+    const body = req.body;
+    if (body) {
+      const reader = readerFromStreamReader(body.getReader());
+      return await readAll(reader);
+    }
   } catch {
     // Fail silently
   }
