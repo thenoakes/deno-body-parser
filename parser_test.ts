@@ -8,10 +8,10 @@ import { streamFromMultipart } from "https://deno.land/x/multipart_stream@0.1.1/
 
 const   HDR_VAL_UNKNOWN_TYPE='x-unknown-type',
         LOCAL_DIR=await Deno.realPath('./'),
-        // TEMP_DIR='/private/var/tmp',
+        TEMP_DIR='/private/var/tmp',
         OPTIONS_UNKNOWN_AS_TEXT={unknownAsText: true},
         OPTIONS_SAVE_BODY_TO_FILE={saveBodyToFile: true},
-        // OPTIONS_SAVE_BODY_TO_FILE_TO_PATH=Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE, {saveFilePath: TEMP_DIR}),
+        OPTIONS_SAVE_BODY_TO_FILE_TO_PATH=Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE, {saveFilePath: TEMP_DIR}),
         OPTIONS_NO_XML_TO_JSON={xmlToJson: false},
         SAMPLE_FILE_PATH='./testData/sample',
         SIMPLE_TEXT_BODY_ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -253,17 +253,17 @@ Deno.test(`ct=u, body=${EMPTY_JSON_BODY}`, async () => {
     await rawAsserts(ret, JSON.stringify(EMPTY_JSON_BODY));
 });
 
-Deno.test(`ct=u, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtf`, { only: true }, async () => {
+Deno.test(`ct=u, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtf`, async () => {
     const req=await prepareRequest(HDR_VAL_UNKNOWN_TYPE, SIMPLE_TEXT_BODY_NUMBERS, undefined);
     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
     await fileAsserts(ret.files, LOCAL_DIR, 'bin');
 });
 
-// Deno.test(`ct=u, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtftp`, async () => {
-//     const req=await prepareRequest(HDR_VAL_UNKNOWN_TYPE, SIMPLE_TEXT_BODY_NUMBERS, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, 'bin');
-// });
+Deno.test(`ct=u, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtftp`, async () => {
+    const req=await prepareRequest(HDR_VAL_UNKNOWN_TYPE, SIMPLE_TEXT_BODY_NUMBERS, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, 'bin');
+});
 
 Deno.test(`ct=audio/aac`, async () => {
     const ext='aac';
@@ -272,19 +272,19 @@ Deno.test(`ct=audio/aac`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=audio/aac, sbtf`, async () => {
-//     const ext='aac';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.AUDIO_AAC, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=audio/aac, sbtf`, async () => {
+    const ext='aac';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.AUDIO_AAC, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=audio/aac, sbtftp`, async () => {
-//     const ext='aac';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.AUDIO_AAC, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=audio/aac, sbtftp`, async () => {
+    const ext='aac';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.AUDIO_AAC, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/octet-stream`, async () => {
     const ext='bin';
@@ -293,19 +293,19 @@ Deno.test(`ct=application/octet-stream`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/octet-stream, sbtf`, async () => {
-//     const ext='bin';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.OCTET_STREAM, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/octet-stream, sbtf`, async () => {
+    const ext='bin';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.OCTET_STREAM, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/octet-stream, sbtftp`, async () => {
-//     const ext='bin';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.OCTET_STREAM, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/octet-stream, sbtftp`, async () => {
+    const ext='bin';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.OCTET_STREAM, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/x-bzip2`, async () => {
     const ext='bz2';
@@ -314,19 +314,19 @@ Deno.test(`ct=application/x-bzip2`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/x-bzip2, sbtf`, async () => {
-//     const ext='bz2';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.BZIP_2, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/x-bzip2, sbtf`, async () => {
+    const ext='bz2';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.BZIP_2, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/x-bzip2, sbtftp`, async () => {
-//     const ext='bz2';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.BZIP_2, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/x-bzip2, sbtftp`, async () => {
+    const ext='bz2';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.BZIP_2, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=text/csv`, async () => {
     const ext='csv';
@@ -335,19 +335,19 @@ Deno.test(`ct=text/csv`, async () => {
     await textAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=text/csv, sbtf`, async () => {
-//     const ext='csv';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.CSV, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=text/csv, sbtf`, async () => {
+    const ext='csv';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.CSV, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=text/csv, sbtftp`, async () => {
-//     const ext='csv';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.CSV, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=text/csv, sbtftp`, async () => {
+    const ext='csv';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.CSV, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/msword`, async () => {
     const ext='doc';
@@ -356,19 +356,19 @@ Deno.test(`ct=application/msword`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/msword, sbtf`, async () => {
-//     const ext='doc';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/msword, sbtf`, async () => {
+    const ext='doc';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/msword, sbtftp`, async () => {
-//     const ext='doc';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/msword, sbtftp`, async () => {
+    const ext='doc';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.document`, async () => {
     const ext='docx';
@@ -377,19 +377,19 @@ Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.doc
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.document, sbtf`, async () => {
-//     const ext='docx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.document, sbtf`, async () => {
+    const ext='docx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.document, sbtftp`, async () => {
-//     const ext='docx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.wordprocessingml.document, sbtftp`, async () => {
+    const ext='docx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MS_WORD_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/epub+zip`, async () => {
     const ext='epub';
@@ -398,19 +398,19 @@ Deno.test(`ct=application/epub+zip`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/epub+zip, sbtf`, async () => {
-//     const ext='epub';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.EPUB, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/epub+zip, sbtf`, async () => {
+    const ext='epub';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.EPUB, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/epub+zip, sbtftp`, async () => {
-//     const ext='epub';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.EPUB, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/epub+zip, sbtftp`, async () => {
+    const ext='epub';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.EPUB, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/gzip`, async () => {
     const ext='gz';
@@ -419,19 +419,19 @@ Deno.test(`ct=application/gzip`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/gzip, sbtf`, async () => {
-//     const ext='gz';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GZ, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/gzip, sbtf`, async () => {
+    const ext='gz';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GZ, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/gzip, sbtftp`, async () => {
-//     const ext='gz';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GZ, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/gzip, sbtftp`, async () => {
+    const ext='gz';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GZ, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=image/gif`, async () => {
     const ext='gif';
@@ -440,19 +440,19 @@ Deno.test(`ct=image/gif`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=image/gif, sbtf`, async () => {
-//     const ext='gif';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GIF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=image/gif, sbtf`, async () => {
+    const ext='gif';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GIF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=image/gif, sbtftp`, async () => {
-//     const ext='gif';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GIF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=image/gif, sbtftp`, async () => {
+    const ext='gif';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.GIF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=text/html`, async () => {
     const ext='html';
@@ -461,19 +461,19 @@ Deno.test(`ct=text/html`, async () => {
     await textAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=text/html, sbtf`, async () => {
-//     const ext='html';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.HTML, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=text/html, sbtf`, async () => {
+    const ext='html';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.HTML, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=text/html, sbtftp`, async () => {
-//     const ext='html';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.HTML, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=text/html, sbtftp`, async () => {
+    const ext='html';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.HTML, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=image/jpeg`, async () => {
     const ext='jpg';
@@ -482,19 +482,19 @@ Deno.test(`ct=image/jpeg`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=image/jpeg, sbtf`, async () => {
-//     const ext='jpg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JPG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=image/jpeg, sbtf`, async () => {
+    const ext='jpg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JPG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=image/jpeg, sbtftp`, async () => {
-//     const ext='jpg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JPG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=image/jpeg, sbtftp`, async () => {
+    const ext='jpg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JPG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/json`, async () => {
     const ext='json';
@@ -510,19 +510,19 @@ Deno.test(`ct=application/json, incorrect`, async () => {
     await dataAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/json, sbtf`, async () => {
-//     const ext='json';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JSON, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/json, sbtf`, async () => {
+    const ext='json';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JSON, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/json, sbtftp`, async () => {
-//     const ext='json';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JSON, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/json, sbtftp`, async () => {
+    const ext='json';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.JSON, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=audio/mpeg`, async () => {
     const ext='mp3';
@@ -531,19 +531,19 @@ Deno.test(`ct=audio/mpeg`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=audio/mpeg, sbtf`, async () => {
-//     const ext='mp3';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP3, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=audio/mpeg, sbtf`, async () => {
+    const ext='mp3';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP3, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=audio/mpeg, sbtftp`, async () => {
-//     const ext='mp3';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP3, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=audio/mpeg, sbtftp`, async () => {
+    const ext='mp3';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP3, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=video/mp4`, async () => {
     const ext='mp4';
@@ -552,19 +552,19 @@ Deno.test(`ct=video/mp4`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=video/mp4, sbtf`, async () => {
-//     const ext='mp4';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP4, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=video/mp4, sbtf`, async () => {
+    const ext='mp4';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP4, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=video/mp4, sbtftp`, async () => {
-//     const ext='mp4';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP4, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=video/mp4, sbtftp`, async () => {
+    const ext='mp4';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MP4, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=video/mpeg`, async () => {
@@ -574,19 +574,19 @@ Deno.test(`ct=video/mpeg`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=video/mpeg, sbtf`, async () => {
-//     const ext='mpeg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MPEG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=video/mpeg, sbtf`, async () => {
+    const ext='mpeg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MPEG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=video/mpeg, sbtftp`, async () => {
-//     const ext='mpeg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MPEG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=video/mpeg, sbtftp`, async () => {
+    const ext='mpeg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MPEG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=image/png`, async () => {
@@ -596,19 +596,19 @@ Deno.test(`ct=image/png`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=image/png, sbtf`, async () => {
-//     const ext='png';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PNG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=image/png, sbtf`, async () => {
+    const ext='png';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PNG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=image/png, sbtftp`, async () => {
-//     const ext='png';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PNG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=image/png, sbtftp`, async () => {
+    const ext='png';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PNG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/pdf`, async () => {
     const ext='pdf';
@@ -617,19 +617,19 @@ Deno.test(`ct=application/pdf`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/pdf, sbtf`, async () => {
-//     const ext='pdf';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PDF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/pdf, sbtf`, async () => {
+    const ext='pdf';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PDF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/pdf, sbtftp`, async () => {
-//     const ext='pdf';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PDF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/pdf, sbtftp`, async () => {
+    const ext='pdf';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PDF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/vnd.ms-powerpoint`, async () => {
     const ext='ppt';
@@ -638,19 +638,19 @@ Deno.test(`ct=application/vnd.ms-powerpoint`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.ms-powerpoint, sbtf`, async () => {
-//     const ext='ppt';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.ms-powerpoint, sbtf`, async () => {
+    const ext='ppt';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.ms-powerpoint, sbtftp`, async () => {
-//     const ext='ppt';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.ms-powerpoint, sbtftp`, async () => {
+    const ext='ppt';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.presentation`, async () => {
@@ -660,19 +660,19 @@ Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.prese
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.presentation, sbtf`, async () => {
-//     const ext='pptx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.presentation, sbtf`, async () => {
+    const ext='pptx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.presentation, sbtftp`, async () => {
-//     const ext='pptx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.presentationml.presentation, sbtftp`, async () => {
+    const ext='pptx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.PPT_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=application/vnd.rar`, async () => {
@@ -682,19 +682,19 @@ Deno.test(`ct=application/vnd.rar`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.rar, sbtf`, async () => {
-//     const ext='rar';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RAR, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.rar, sbtf`, async () => {
+    const ext='rar';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RAR, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.rar, sbtftp`, async () => {
-//     const ext='rar';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RAR, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.rar, sbtftp`, async () => {
+    const ext='rar';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RAR, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/rtf`, async () => {
     const ext='rtf';
@@ -703,19 +703,19 @@ Deno.test(`ct=application/rtf`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/rtf, sbtf`, async () => {
-//     const ext='rtf';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RTF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/rtf, sbtf`, async () => {
+    const ext='rtf';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RTF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/rtf, sbtftp`, async () => {
-//     const ext='rtf';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RTF, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/rtf, sbtftp`, async () => {
+    const ext='rtf';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.RTF, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=image/svg+xml`, async () => {
     const ext='svg';
@@ -724,19 +724,19 @@ Deno.test(`ct=image/svg+xml`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=image/svg+xml, sbtf`, async () => {
-//     const ext='svg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.SVG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=image/svg+xml, sbtf`, async () => {
+    const ext='svg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.SVG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=image/svg+xml, sbtftp`, async () => {
-//     const ext='svg';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.SVG, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=image/svg+xml, sbtftp`, async () => {
+    const ext='svg';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.SVG, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/x-tar`, async () => {
     const ext='tar';
@@ -745,19 +745,19 @@ Deno.test(`ct=application/x-tar`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/x-tar, sbtf`, async () => {
-//     const ext='tar';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TAR, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/x-tar, sbtf`, async () => {
+    const ext='tar';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TAR, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/x-tar, sbtftp`, async () => {
-//     const ext='tar';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TAR, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/x-tar, sbtftp`, async () => {
+    const ext='tar';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TAR, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}`, async () => {
@@ -766,17 +766,17 @@ Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}`, async () => {
     await textAsserts(ret, SIMPLE_TEXT_BODY_ALPHABET);
 });
 
-// Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}, sbtf`, async () => {
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_ALPHABET, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, 'txt');
-// });
+Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}, sbtf`, async () => {
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_ALPHABET, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, 'txt');
+});
 
-// Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}, sbtftp`, async () => {
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_ALPHABET, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, 'txt');
-// });
+Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_ALPHABET}, sbtftp`, async () => {
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_ALPHABET, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, 'txt');
+});
 
 Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}`, async () => {
     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_NUMBERS, undefined);
@@ -784,17 +784,17 @@ Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}`, async () => {
     await textAsserts(ret, SIMPLE_TEXT_BODY_NUMBERS);
 });
 
-// Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtf`, async () => {
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_NUMBERS, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, 'txt');
-// });
+Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtf`, async () => {
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_NUMBERS, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, 'txt');
+});
 
-// Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtftp`, async () => {
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_NUMBERS, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, 'txt');
-// });
+Deno.test(`ct=text/plain, body=${SIMPLE_TEXT_BODY_NUMBERS}, sbtftp`, async () => {
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.TEXT, SIMPLE_TEXT_BODY_NUMBERS, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, 'txt');
+});
 
 Deno.test(`ct=text/plain`, async () => {
     const ext='txt';
@@ -810,19 +810,19 @@ Deno.test(`ct=audio/wav`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=audio/wav, sbtf`, async () => {
-//     const ext='wav';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.WAV, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=audio/wav, sbtf`, async () => {
+    const ext='wav';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.WAV, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=audio/wav, sbtftp`, async () => {
-//     const ext='wav';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.WAV, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=audio/wav, sbtftp`, async () => {
+    const ext='wav';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.WAV, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/vnd.ms-excel`, async () => {
     const ext='xls';
@@ -831,19 +831,19 @@ Deno.test(`ct=application/vnd.ms-excel`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.ms-excel, sbtf`, async () => {
-//     const ext='xls';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.ms-excel, sbtf`, async () => {
+    const ext='xls';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.ms-excel, sbtftp`, async () => {
-//     const ext='xls';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.ms-excel, sbtftp`, async () => {
+    const ext='xls';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, async () => {
     const ext='xlsx';
@@ -852,19 +852,19 @@ Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, sbtf`, async () => {
-//     const ext='xlsx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, sbtf`, async () => {
+    const ext='xlsx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, sbtftp`, async () => {
-//     const ext='xlsx';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS_X, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, sbtftp`, async () => {
+    const ext='xlsx';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XLS_X, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 
 Deno.test(`ct=application/zip`, async () => {
@@ -874,19 +874,19 @@ Deno.test(`ct=application/zip`, async () => {
     await rawAsserts(ret, undefined, ext);
 });
 
-// Deno.test(`ct=application/zip, sbtf`, async () => {
-//     const ext='zip';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.ZIP, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=application/zip, sbtf`, async () => {
+    const ext='zip';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.ZIP, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=application/zip, sbtftp`, async () => {
-//     const ext='zip';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.ZIP, undefined, ext);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=application/zip, sbtftp`, async () => {
+    const ext='zip';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.ZIP, undefined, ext);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
 Deno.test(`ct=application/x-www-form-urlencoded, body=1`, async () => {
     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.URL_ENCODED, URL_ENCODED_DATA[1].a, undefined);
@@ -918,19 +918,19 @@ Deno.test(`ct=application/x-www-form-urlencoded, body=5`, async () => {
     await dataAsserts(ret, URL_ENCODED_DATA[5].b);
 });
 
-// Deno.test(`ct=application/x-www-form-urlencoded, body=5, sbtf`, async () => {
-//     const ext='data';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.URL_ENCODED, URL_ENCODED_DATA[5].a, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, false);
-// });
+Deno.test(`ct=application/x-www-form-urlencoded, body=5, sbtf`, async () => {
+    const ext='data';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.URL_ENCODED, URL_ENCODED_DATA[5].a, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE);
+    await fileAsserts(ret.files, LOCAL_DIR, ext, false);
+});
 
-// Deno.test(`ct=application/x-www-form-urlencoded, body=5, sbtftp`, async () => {
-//     const ext='data';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.URL_ENCODED, URL_ENCODED_DATA[5].a, undefined);
-//     const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
-//     await fileAsserts(ret.files, TEMP_DIR, ext, false);
-// });
+Deno.test(`ct=application/x-www-form-urlencoded, body=5, sbtftp`, async () => {
+    const ext='data';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.URL_ENCODED, URL_ENCODED_DATA[5].a, undefined);
+    const ret=await parse(req, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH);
+    await fileAsserts(ret.files, TEMP_DIR, ext, false);
+});
 
 Deno.test(`ct=text/xml, body=simple`, async () => {
     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XML, XML_SAMPLE, undefined);
@@ -944,20 +944,21 @@ Deno.test(`ct=text/xml, body=simple`, async () => {
     await textAsserts(ret, XML_SAMPLE);
 });
 
-// Deno.test(`ct=text/xml, body=sample, sbtf`, async () => {
-//     const ext='xml';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XML, undefined, ext);
-//     const ret=await parse(req, Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE, OPTIONS_NO_XML_TO_JSON));
-//     await fileAsserts(ret.files, LOCAL_DIR, ext, true);
-// });
+Deno.test(`ct=text/xml, body=sample, sbtf`, async () => {
+    const ext='xml';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XML, undefined, ext);
+    const ret=await parse(req, Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE, OPTIONS_NO_XML_TO_JSON));
+    await fileAsserts(ret.files, LOCAL_DIR, ext, true);
+});
 
-// Deno.test(`ct=text/xml, body=sample, sbtftp`, async () => {
-//     const ext='xml';
-//     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XML, undefined, ext);
-//     const ret=await parse(req, Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH, OPTIONS_NO_XML_TO_JSON));
-//     await fileAsserts(ret.files, TEMP_DIR, ext, true);
-// });
+Deno.test(`ct=text/xml, body=sample, sbtftp`, async () => {
+    const ext='xml';
+    const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.XML, undefined, ext);
+    const ret=await parse(req, Object.assign({}, OPTIONS_SAVE_BODY_TO_FILE_TO_PATH, OPTIONS_NO_XML_TO_JSON));
+    await fileAsserts(ret.files, TEMP_DIR, ext, true);
+});
 
+///
 
 // Deno.test(`ct=multipart/form-data, body=simple`, async () => {
 //     const req=await prepareRequest(ParserMeta.MIME_CONTENT_TYPES.MULTIPART_FORM_DATA, SIMPLE_JSON_FOR_MFD, undefined);
